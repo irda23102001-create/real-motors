@@ -1,0 +1,217 @@
+<%- include('partials/header') %>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-tagline">Cars & Motorbikes </p>
+    <h1 class="hero-title">Drive Your <span>Dream</span></h1>
+    <p class="hero-subtitle">Discover Albania's finest selection of premium cars and motorbikes. Quality vehicles, transparent pricing, exceptional service.</p>
+    <div class="hero-actions">
+      <a href="/inventory" class="btn btn-primary btn-lg">
+        <i class="fas fa-car"></i> View Inventory
+      </a>
+      <a href="/appointment" class="btn btn-outline btn-lg">
+        <i class="fas fa-calendar-check"></i> Book Appointment
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="stat-num" data-target="<%= stats.totalCars %>">0</span>
+        <span class="stat-label">Vehicles</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="stat-num" data-target="500">0</span>
+        <span class="stat-label">Happy Clients</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="stat-num" data-target="8">0</span>
+        <span class="stat-label">Years Experience</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- FLASH MESSAGES -->
+<% if (success && success.length > 0) { %>
+<div class="alert alert-success"><i class="fas fa-check-circle"></i> <%= success[0] %></div>
+<% } %>
+<% if (error && error.length > 0) { %>
+<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <%= error[0] %></div>
+<% } %>
+
+<!-- FEATURED CARS -->
+<section class="section featured-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Our Vehicles</span>
+      <h2 class="section-title">Featured <span>Inventory</span></h2>
+      <p class="section-sub">Hand-picked vehicles available for immediate purchase. All cars are thoroughly inspected and certified.</p>
+    </div>
+    <div class="cars-grid">
+      <% featuredCars.forEach(car => { %>
+      <div class="car-card">
+        <div class="car-card-img">
+          <a href="/car/<%= car.id %>">
+            <img src="<%= car.main_image || '/images/car-placeholder.svg' %>" alt="<%= car.brand %> <%= car.model %>" loading="lazy">
+          </a>
+          <div class="car-badge status-<%= car.status %>"><%= car.status.charAt(0).toUpperCase() + car.status.slice(1) %></div>
+          <div class="car-card-overlay">
+            <a href="/car/<%= car.id %>" class="btn-view">View Details <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="car-card-body">
+          <div class="car-card-brand"><%= car.brand %></div>
+          <h3 class="car-card-title"><a href="/car/<%= car.id %>"><%= car.model %> <span><%= car.version || '' %></span></a></h3>
+          <div class="car-card-specs">
+            <span><i class="fas fa-calendar-alt"></i> <%= car.year %></span>
+            <span><i class="fas fa-tachometer-alt"></i> <%= car.kilometers ? car.kilometers.toLocaleString() : '0' %> km</span>
+            <span><i class="fas fa-gas-pump"></i> <%= car.fuel_type %></span>
+            <span><i class="fas fa-cog"></i> <%= car.transmission %></span>
+          </div>
+          <div class="car-card-footer">
+            <div class="car-price">€<%= car.price ? car.price.toLocaleString() : '0' %></div>
+            <a href="/car/<%= car.id %>" class="btn btn-sm btn-primary">Details</a>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+    <div class="section-cta">
+      <a href="/inventory" class="btn btn-outline btn-lg">View All Vehicles <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section why-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Why Real Motors</span>
+      <h2 class="section-title">The Real Motors <span>Difference</span></h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3>Certified Quality</h3>
+        <p>Every vehicle undergoes a rigorous 150-point inspection before joining our inventory. We guarantee mechanical excellence.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-file-contract"></i></div>
+        <h3>Transparent Pricing</h3>
+        <p>No hidden fees, no surprises. Our prices are clear and fair, with full documentation history available for every vehicle.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-handshake"></i></div>
+        <h3>Expert Guidance</h3>
+        <p>Our experienced team will help you find the perfect vehicle that matches your needs, lifestyle, and budget.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-tools"></i></div>
+        <h3>After-Sale Support</h3>
+        <p>Our relationship doesn't end at the sale. We provide ongoing support and can connect you with trusted service partners.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-road"></i></div>
+        <h3>Test Drives</h3>
+        <p>Experience your potential vehicle on the road. We encourage test drives to ensure you make the right choice with confidence.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-euro-sign"></i></div>
+        <h3>Flexible Financing</h3>
+        <p>We work with trusted financial partners to offer flexible payment solutions that make your dream vehicle attainable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BANNER -->
+<section class="stats-banner">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number" data-target="<%= stats.totalCars %>">0</div>
+        <div class="stat-label">Vehicles in Stock</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="<%= stats.soldCars + 500 %>">0</div>
+        <div class="stat-label">Cars Sold</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="98">0</div>
+        <div class="stat-label">% Satisfaction Rate</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="8">0</div>
+        <div class="stat-label">Years in Business</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section testimonials-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Client Reviews</span>
+      <h2 class="section-title">What Our <span>Clients Say</span></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p>"Excellent experience from start to finish. The team at Real Motors helped me find the perfect BMW X5 within my budget. Professional, honest, and efficient."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AK</div>
+          <div>
+            <strong>Artan Kelmendi</strong>
+            <span>BMW X5 Owner</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card featured-testimonial">
+        <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p>"I was impressed by the quality of cars and the transparency of the process. No pressure, just genuine help. I bought my Mercedes C-Class here and couldn't be happier!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">EB</div>
+          <div>
+            <strong>Elona Basha</strong>
+            <span>Mercedes C-Class Owner</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p>"Real Motors treated me like family. The whole process was smooth, and the Audi A6 I purchased is in absolutely perfect condition. Highly recommended!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">MH</div>
+          <div>
+            <strong>Mirela Hoxha</strong>
+            <span>Audi A6 Owner</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <div class="container cta-content">
+    <h2>Ready to Find Your <span>Perfect Vehicle?</span></h2>
+    <p>Browse our full inventory or book an appointment with our team today.</p>
+    <div class="cta-actions">
+      <a href="/inventory" class="btn btn-white btn-lg">Browse Inventory</a>
+      <a href="/appointment" class="btn btn-outline-white btn-lg">Book Appointment</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

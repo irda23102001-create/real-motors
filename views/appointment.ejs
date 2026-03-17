@@ -1,0 +1,130 @@
+<%- include('partials/header') %>
+
+<div class="page-hero">
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <h1>Book an <span>Appointment</span></h1>
+    <p>Schedule your visit or test drive with us</p>
+    <nav class="breadcrumb">
+      <a href="/">Home</a> <i class="fas fa-chevron-right"></i> <span>Appointment</span>
+    </nav>
+  </div>
+</div>
+
+<section class="section appointment-section">
+  <div class="container">
+    <% if (success && success.length > 0) { %>
+    <div class="alert alert-success alert-lg">
+      <i class="fas fa-check-circle"></i>
+      <div>
+        <strong>Appointment Request Received!</strong>
+        <p><%= success[0] %></p>
+      </div>
+    </div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+    <div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <%= error[0] %></div>
+    <% } %>
+
+    <div class="appointment-grid">
+      <div class="appointment-info">
+        <h2>Schedule Your <span>Visit</span></h2>
+        <p>Book a test drive or come in to meet our team. We'll have everything ready for you.</p>
+        <div class="appointment-steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+              <strong>Choose a Vehicle</strong>
+              <span>Select the car you'd like to see or leave blank for general enquiry</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+              <strong>Pick a Date & Time</strong>
+              <span>Choose when works best for you</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">
+              <strong>We Confirm</strong>
+              <span>Our team will confirm your appointment within a few hours</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text">
+              <strong>Visit Us</strong>
+              <span>Come in and experience your potential new vehicle</span>
+            </div>
+          </div>
+        </div>
+        <div class="appointment-contact">
+          <p><i class="fas fa-phone"></i> <a href="tel:+355691234567">+355 69 123 4567</a></p>
+          <p><i class="fas fa-clock"></i> Mon–Sat: 9:00–19:00</p>
+        </div>
+      </div>
+
+      <div class="appointment-form-wrap">
+        <h3>Request an Appointment</h3>
+        <form action="/appointment" method="POST" class="appointment-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" name="name" required placeholder="Your full name">
+            </div>
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" name="phone" required placeholder="+355 6X XXX XXXX">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" name="email" required placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label>Select Vehicle (optional)</label>
+            <select name="car_id">
+              <option value="">-- General Visit / Enquiry --</option>
+              <% cars.forEach(car => { %>
+              <option value="<%= car.id %>" <%= selectedCarId == car.id ? 'selected' : '' %>><%= car.brand %> <%= car.model %> (<%= car.year %>) – €<%= car.price ? car.price.toLocaleString() : '' %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Preferred Date</label>
+              <input type="date" name="appointment_date" min="<%= new Date().toISOString().split('T')[0] %>">
+            </div>
+            <div class="form-group">
+              <label>Preferred Time</label>
+              <select name="appointment_time">
+                <option value="">Select time...</option>
+                <option value="09:00">09:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+                <option value="13:00">13:00</option>
+                <option value="14:00">14:00</option>
+                <option value="15:00">15:00</option>
+                <option value="16:00">16:00</option>
+                <option value="17:00">17:00</option>
+                <option value="18:00">18:00</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Additional Message</label>
+            <textarea name="message" rows="4" placeholder="Any specific requirements or questions..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-calendar-check"></i> Request Appointment
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

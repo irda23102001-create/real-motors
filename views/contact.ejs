@@ -1,0 +1,101 @@
+<%- include('partials/header') %>
+
+<div class="page-hero">
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <h1>Contact <span>Us</span></h1>
+    <p>We're here to help you find your perfect vehicle</p>
+    <nav class="breadcrumb">
+      <a href="/">Home</a> <i class="fas fa-chevron-right"></i> <span>Contact</span>
+    </nav>
+  </div>
+</div>
+
+<section class="section contact-section">
+  <div class="container">
+    <% if (success && success.length > 0) { %>
+    <div class="alert alert-success"><i class="fas fa-check-circle"></i> <%= success[0] %></div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+    <div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <%= error[0] %></div>
+    <% } %>
+
+    <div class="contact-grid">
+      <!-- Info -->
+      <div class="contact-info">
+        <h2>Get In <span>Touch</span></h2>
+        <p>Have a question about a vehicle or our services? Our friendly team is ready to help. Reach out through any of the channels below.</p>
+
+        <div class="contact-cards">
+          <div class="contact-card">
+            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div>
+              <strong>Showroom Address</strong>
+              <p>Rruga Kavajës, Tiranë, Albania</p>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon"><i class="fas fa-phone"></i></div>
+            <div>
+              <strong>Phone</strong>
+              <p><a href="tel:+355691234567">+355 69 123 4567</a></p>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+            <div>
+              <strong>Email</strong>
+              <p><a href="mailto:info@realmotors.al">info@realmotors.al</a></p>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon"><i class="fas fa-clock"></i></div>
+            <div>
+              <strong>Opening Hours</strong>
+              <p>Monday – Saturday: 9:00 – 19:00<br>Sunday: By appointment only</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map placeholder -->
+        <div class="map-placeholder">
+          <div class="map-inner">
+            <i class="fas fa-map-marked-alt"></i>
+            <p>Real Motors Showroom<br>Rruga Kavajës, Tiranë</p>
+            <a href="https://maps.google.com" target="_blank" class="btn btn-sm btn-primary">Open in Maps</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="contact-form-wrap">
+        <h3>Send Us a Message</h3>
+        <form action="/contact" method="POST" class="contact-form">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" name="name" required placeholder="Your full name">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" name="phone" required placeholder="+355 6X XXX XXXX">
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" name="email" required placeholder="your@email.com">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Message *</label>
+            <textarea name="message" rows="5" required placeholder="How can we help you?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-paper-plane"></i> Send Message
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

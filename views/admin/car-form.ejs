@@ -1,0 +1,276 @@
+<%- include('partials/header', { activePage: car ? 'cars' : 'add-car' }) %>
+
+<div class="admin-page-header">
+  <div>
+    <h1><i class="fas fa-<%= car ? 'edit' : 'plus-circle' %>"></i> <%= car ? 'Edit Car' : 'Add New Car' %></h1>
+    <p><%= car ? `Editing: ${car.brand} ${car.model} (${car.year})` : 'Add a new vehicle to the inventory' %></p>
+  </div>
+  <a href="/admin/cars" class="btn-admin-outline"><i class="fas fa-arrow-left"></i> Back to Cars</a>
+</div>
+
+<form action="<%= action %>" method="POST" enctype="multipart/form-data">
+
+  <div class="admin-card" style="margin-bottom:1.5rem">
+    <div class="admin-card-header"><h3><i class="fas fa-info-circle"></i> Basic Information</h3></div>
+    <div style="padding:1.5rem">
+      <div class="cf-grid-3">
+        <div class="cf-group">
+          <label>Brand *</label>
+          <input type="text" name="brand" required value="<%= car ? car.brand : '' %>" placeholder="e.g. BMW, Audi">
+        </div>
+        <div class="cf-group">
+          <label>Model *</label>
+          <input type="text" name="model" required value="<%= car ? car.model : '' %>" placeholder="e.g. X5, A6">
+        </div>
+        <div class="cf-group">
+          <label>Version / Trim</label>
+          <input type="text" name="version" value="<%= car ? car.version || '' : '' %>" placeholder="e.g. M Sport">
+        </div>
+        <div class="cf-group">
+          <label>Year *</label>
+          <input type="number" name="year" required min="1990" max="2026" value="<%= car ? car.year : new Date().getFullYear() %>">
+        </div>
+        <div class="cf-group">
+          <label>Kilometres</label>
+          <input type="number" name="kilometers" min="0" value="<%= car ? car.kilometers : 0 %>">
+        </div>
+        <div class="cf-group">
+          <label>Price (€) *</label>
+          <input type="number" name="price" required min="0" step="100" value="<%= car ? car.price : '' %>">
+        </div>
+        <div class="cf-group">
+          <label>Status</label>
+          <select name="status">
+            <option value="available" <%= !car || car.status === 'available' ? 'selected' : '' %>>Available</option>
+            <option value="reserved" <%= car && car.status === 'reserved' ? 'selected' : '' %>>Reserved</option>
+            <option value="sold" <%= car && car.status === 'sold' ? 'selected' : '' %>>Sold</option>
+          </select>
+        </div>
+        <div class="cf-group">
+          <label>Condition</label>
+          <select name="condition">
+            <option value="used" <%= !car || car.condition === 'used' ? 'selected' : '' %>>Used</option>
+            <option value="new" <%= car && car.condition === 'new' ? 'selected' : '' %>>New</option>
+            <option value="certified" <%= car && car.condition === 'certified' ? 'selected' : '' %>>Certified Pre-Owned</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-card" style="margin-bottom:1.5rem">
+    <div class="admin-card-header"><h3><i class="fas fa-cogs"></i> Technical Specifications</h3></div>
+    <div style="padding:1.5rem">
+      <div class="cf-grid-3">
+        <div class="cf-group">
+          <label>Engine</label>
+          <input type="text" name="engine" value="<%= car ? car.engine || '' : '' %>" placeholder="e.g. 2.0 TDI">
+        </div>
+        <div class="cf-group">
+          <label>Horsepower (bhp)</label>
+          <input type="number" name="horsepower" min="0" value="<%= car ? car.horsepower || '' : '' %>">
+        </div>
+        <div class="cf-group">
+          <label>Fuel Type</label>
+          <select name="fuel_type">
+            <option value="">Select...</option>
+            <option value="Petrol" <%= car && car.fuel_type === 'Petrol' ? 'selected' : '' %>>Petrol</option>
+            <option value="Diesel" <%= car && car.fuel_type === 'Diesel' ? 'selected' : '' %>>Diesel</option>
+            <option value="Hybrid" <%= car && car.fuel_type === 'Hybrid' ? 'selected' : '' %>>Hybrid</option>
+            <option value="Electric" <%= car && car.fuel_type === 'Electric' ? 'selected' : '' %>>Electric</option>
+            <option value="LPG" <%= car && car.fuel_type === 'LPG' ? 'selected' : '' %>>LPG</option>
+          </select>
+        </div>
+        <div class="cf-group">
+          <label>Transmission</label>
+          <select name="transmission">
+            <option value="">Select...</option>
+            <option value="Automatic" <%= car && car.transmission === 'Automatic' ? 'selected' : '' %>>Automatic</option>
+            <option value="Manual" <%= car && car.transmission === 'Manual' ? 'selected' : '' %>>Manual</option>
+            <option value="DSG Automatic" <%= car && car.transmission === 'DSG Automatic' ? 'selected' : '' %>>DSG Automatic</option>
+            <option value="Tiptronic Automatic" <%= car && car.transmission === 'Tiptronic Automatic' ? 'selected' : '' %>>Tiptronic</option>
+            <option value="e-CVT Automatic" <%= car && car.transmission === 'e-CVT Automatic' ? 'selected' : '' %>>e-CVT</option>
+          </select>
+        </div>
+        <div class="cf-group">
+          <label>Body Type</label>
+          <select name="body_type">
+            <option value="">Select...</option>
+            <option value="Sedan" <%= car && car.body_type === 'Sedan' ? 'selected' : '' %>>Sedan</option>
+            <option value="Hatchback" <%= car && car.body_type === 'Hatchback' ? 'selected' : '' %>>Hatchback</option>
+            <option value="SUV" <%= car && car.body_type === 'SUV' ? 'selected' : '' %>>SUV</option>
+            <option value="Coupe" <%= car && car.body_type === 'Coupe' ? 'selected' : '' %>>Coupe</option>
+            <option value="Estate" <%= car && car.body_type === 'Estate' ? 'selected' : '' %>>Estate</option>
+            <option value="Convertible" <%= car && car.body_type === 'Convertible' ? 'selected' : '' %>>Convertible</option>
+            <option value="Van" <%= car && car.body_type === 'Van' ? 'selected' : '' %>>Van</option>
+          </select>
+        </div>
+        <div class="cf-group">
+          <label>Doors</label>
+          <select name="doors">
+            <option value="2" <%= car && car.doors == 2 ? 'selected' : '' %>>2</option>
+            <option value="3" <%= car && car.doors == 3 ? 'selected' : '' %>>3</option>
+            <option value="4" <%= !car || car.doors == 4 ? 'selected' : '' %>>4</option>
+            <option value="5" <%= car && car.doors == 5 ? 'selected' : '' %>>5</option>
+          </select>
+        </div>
+        <div class="cf-group">
+          <label>Exterior Colour</label>
+          <input type="text" name="color" value="<%= car ? car.color || '' : '' %>" placeholder="e.g. Mythos Black">
+        </div>
+        <div class="cf-group">
+          <label>Interior</label>
+          <input type="text" name="interior" value="<%= car ? car.interior || '' : '' %>" placeholder="e.g. Black Leather">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-card" style="margin-bottom:1.5rem">
+    <div class="admin-card-header"><h3><i class="fas fa-align-left"></i> Description</h3></div>
+    <div style="padding:1.5rem">
+      <div class="cf-group">
+        <label>Vehicle Description</label>
+        <textarea name="description" rows="7" placeholder="Write a detailed description..."><%= car ? car.description || '' : '' %></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-card" style="margin-bottom:1.5rem">
+    <div class="admin-card-header">
+      <h3><i class="fas fa-check-square"></i> Features &amp; Equipment</h3>
+    </div>
+    <div style="padding:1.5rem">
+      <%
+        const allFeatures = [
+          'Air Conditioning','Navigation System','Bluetooth','Rear Camera',
+          'Parking Sensors','360° Parking','Heated Seats','Ventilated Seats',
+          'Massage Seats','Sunroof','Panoramic Roof','LED Headlights',
+          'Adaptive Cruise Control','Lane Assist','Head-Up Display',
+          'Apple CarPlay','Android Auto','Wireless Charging','Ambient Lighting',
+          'Sport Package','Air Suspension','Night Vision','Premium Sound System',
+          'Digital Cockpit','Keyless Entry','Electric Tailgate','Memory Seats',
+          '4WD/AWD','Tow Bar','Heated Steering Wheel','Electric Seats',
+          'Privacy Glass','Start/Stop System','LSD Differential','Sport Suspension'
+        ];
+        const selectedFeatures = car && car.features ? car.features : [];
+      %>
+      <div class="features-check-grid">
+        <% allFeatures.forEach(function(f) { %>
+        <label class="feature-checkbox">
+          <input type="checkbox" name="features" value="<%= f %>" <%= selectedFeatures.includes(f) ? 'checked' : '' %>>
+          <span><i class="fas fa-check"></i> <%= f %></span>
+        </label>
+        <% }); %>
+      </div>
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--bg-soft)">
+        <label style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);display:block;margin-bottom:0.5rem">Add Custom Features (comma-separated)</label>
+        <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
+          <input type="text" id="customFeatureInput" placeholder="e.g. Bose Sound System, Panoramic Camera" style="flex:1;min-width:220px;padding:0.65rem 1rem;border:1.5px solid #dde3ee;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem">
+          <button type="button" onclick="addCustomFeatures()" class="btn-admin-sm"><i class="fas fa-plus"></i> Add</button>
+        </div>
+        <div id="customFeaturesList" style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:0.5rem"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-card" style="margin-bottom:5rem">
+    <div class="admin-card-header"><h3><i class="fas fa-images"></i> Vehicle Images</h3></div>
+    <div style="padding:1.5rem">
+      <% if (car && car.main_image) { %>
+      <div style="margin-bottom:1.5rem">
+        <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:0.5rem">Current Main Image</p>
+        <img src="<%= car.main_image %>" alt="Current" style="width:200px;height:140px;object-fit:cover;border-radius:10px;border:2px solid var(--bg-soft)">
+      </div>
+      <% } %>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+        <div class="cf-group">
+          <label>Main Image <%= car ? '(upload to replace current)' : '' %></label>
+          <div class="file-upload-area" onclick="this.querySelector('input').click()" style="cursor:pointer">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Click to select main image</p>
+            <small>JPG, PNG, WEBP — Max 10MB</small>
+            <input type="file" name="main_image" accept="image/*" onchange="previewMain(this)" style="display:none">
+          </div>
+          <div id="mainPreview" style="margin-top:0.75rem"></div>
+        </div>
+        <div class="cf-group">
+          <label>Gallery Images (multiple)</label>
+          <div class="file-upload-area" onclick="this.querySelector('input').click()" style="cursor:pointer">
+            <i class="fas fa-photo-film"></i>
+            <p>Click to select gallery images</p>
+            <small>Select multiple files</small>
+            <input type="file" name="gallery" accept="image/*" multiple onchange="previewGallery(this)" style="display:none">
+          </div>
+          <div id="galleryPreview" style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:0.5rem"></div>
+        </div>
+      </div>
+      <% const galleryImgs = typeof gallery !== 'undefined' ? gallery : []; %>
+      <% if (galleryImgs.length > 0) { %>
+      <div style="padding-top:1.25rem;border-top:1px solid var(--bg-soft)">
+        <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:0.75rem">Existing Gallery (<%= galleryImgs.length %> images)</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.75rem">
+          <% galleryImgs.forEach(function(img) { %>
+          <div style="position:relative">
+            <img src="<%= img.image_path %>" style="width:100px;height:72px;object-fit:cover;border-radius:8px;border:2px solid var(--bg-soft)">
+            <form action="/admin/cars/gallery/delete/<%= img.id %>" method="POST" onsubmit="return confirm('Delete image?')" style="display:inline">
+              <button type="submit" style="position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:#e74c3c;color:white;border:none;cursor:pointer;font-size:0.65rem;display:flex;align-items:center;justify-content:center;line-height:1"><i class="fas fa-times"></i></button>
+            </form>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:flex-end;gap:1rem;padding:1.25rem 1.5rem;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);position:fixed;bottom:0;left:var(--sidebar-w);right:0;z-index:50;border-top:1px solid var(--bg-soft)">
+    <a href="/admin/cars" class="btn-admin-outline"><i class="fas fa-times"></i> Cancel</a>
+    <button type="submit" class="btn-admin-primary">
+      <i class="fas fa-save"></i> <%= car ? 'Update Car' : 'Add to Inventory' %>
+    </button>
+  </div>
+
+</form>
+
+<script>
+function previewMain(input) {
+  const p = document.getElementById('mainPreview');
+  p.innerHTML = '';
+  if (input.files && input.files[0]) {
+    const r = new FileReader();
+    r.onload = e => { p.innerHTML = '<img src="' + e.target.result + '" style="width:180px;height:120px;object-fit:cover;border-radius:10px;border:2px solid var(--bg-soft)">'; };
+    r.readAsDataURL(input.files[0]);
+  }
+}
+function previewGallery(input) {
+  const p = document.getElementById('galleryPreview');
+  p.innerHTML = '';
+  if (input.files) {
+    Array.from(input.files).forEach(file => {
+      const r = new FileReader();
+      r.onload = e => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.style.cssText = 'width:90px;height:65px;object-fit:cover;border-radius:8px;border:2px solid var(--bg-soft)';
+        p.appendChild(img);
+      };
+      r.readAsDataURL(file);
+    });
+  }
+}
+function addCustomFeatures() {
+  const input = document.getElementById('customFeatureInput');
+  const list = document.getElementById('customFeaturesList');
+  const features = input.value.split(',').map(f => f.trim()).filter(f => f.length > 0);
+  features.forEach(feature => {
+    const label = document.createElement('label');
+    label.className = 'feature-checkbox';
+    label.innerHTML = '<input type="checkbox" name="features" value="' + feature + '" checked><span><i class="fas fa-check"></i> ' + feature + '</span>';
+    list.appendChild(label);
+  });
+  input.value = '';
+}
+</script>
+
+<%- include('partials/footer') %>

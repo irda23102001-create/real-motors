@@ -1,0 +1,248 @@
+<%- include('partials/header') %>
+
+<div class="page-hero mini">
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <nav class="breadcrumb">
+      <a href="/">Home</a> <i class="fas fa-chevron-right"></i>
+      <a href="/inventory">Inventory</a> <i class="fas fa-chevron-right"></i>
+      <span><%= car.brand %> <%= car.model %></span>
+    </nav>
+  </div>
+</div>
+
+<section class="car-detail-section">
+  <div class="container">
+    <div class="car-detail-grid">
+      <!-- Left: Gallery -->
+      <div class="car-gallery-wrap">
+        <div class="main-gallery">
+          <div class="gallery-slider" id="gallerySlider">
+            <div class="gallery-slide active">
+              <img src="<%= car.main_image || '/images/car-placeholder.svg' %>" alt="<%= car.brand %> <%= car.model %>" id="mainGalleryImg">
+            </div>
+          </div>
+          <button class="gallery-btn prev" id="galleryPrev"><i class="fas fa-chevron-left"></i></button>
+          <button class="gallery-btn next" id="galleryNext"><i class="fas fa-chevron-right"></i></button>
+          <div class="gallery-counter"><span id="galleryCurrentNum">1</span> / <span id="galleryTotalNum">1</span></div>
+        </div>
+        <div class="gallery-thumbs" id="galleryThumbs">
+          <div class="gallery-thumb active" data-img="<%= car.main_image || '/images/car-placeholder.svg' %>" data-index="0">
+            <img src="<%= car.main_image || '/images/car-placeholder.svg' %>" alt="Main">
+          </div>
+          <% gallery.forEach((img, i) => { %>
+          <div class="gallery-thumb" data-img="<%= img.image_path %>" data-index="<%= i + 1 %>">
+            <img src="<%= img.image_path %>" alt="Gallery <%= i + 1 %>">
+          </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Right: Info -->
+      <div class="car-info-wrap">
+        <div class="car-info-header">
+          <div class="car-info-brand"><%= car.brand %></div>
+          <span class="status-badge status-<%= car.status %>"><%= car.status.charAt(0).toUpperCase() + car.status.slice(1) %></span>
+        </div>
+        <h1 class="car-info-title"><%= car.model %> <span><%= car.version || '' %></span></h1>
+        <div class="car-info-price">€<%= car.price ? car.price.toLocaleString() : 'Contact Us' %></div>
+
+        <div class="car-quick-specs">
+          <div class="quick-spec">
+            <i class="fas fa-calendar-alt"></i>
+            <span><%= car.year %></span>
+            <small>Year</small>
+          </div>
+          <div class="quick-spec">
+            <i class="fas fa-tachometer-alt"></i>
+            <span><%= car.kilometers ? car.kilometers.toLocaleString() : '0' %> km</span>
+            <small>Mileage</small>
+          </div>
+          <div class="quick-spec">
+            <i class="fas fa-gas-pump"></i>
+            <span><%= car.fuel_type %></span>
+            <small>Fuel</small>
+          </div>
+          <div class="quick-spec">
+            <i class="fas fa-cog"></i>
+            <span><%= car.transmission %></span>
+            <small>Gearbox</small>
+          </div>
+        </div>
+
+        <div class="car-info-actions">
+          <a href="/appointment?car=<%= car.id %>" class="btn btn-primary btn-lg w-full">
+            <i class="fas fa-calendar-check"></i> Book Test Drive
+          </a>
+          <a href="/contact" class="btn btn-outline btn-lg w-full">
+            <i class="fas fa-phone"></i> Enquire Now
+          </a>
+        </div>
+
+        <div class="car-contact-quick">
+          <p><i class="fas fa-phone"></i> <a href="tel:+355691234567">+355 69 123 4567</a></p>
+          <p><i class="fas fa-whatsapp" style="color:#25d366"></i> <a href="#">WhatsApp Us</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details Tabs -->
+    <div class="car-tabs">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="description">Description</button>
+        <button class="tab-btn" data-tab="specs">Specifications</button>
+        <button class="tab-btn" data-tab="features">Features</button>
+        <button class="tab-btn" data-tab="enquire">Enquire</button>
+      </div>
+
+      <div class="tab-content active" id="tab-description">
+        <div class="description-text">
+          <p><%= car.description || 'No description available.' %></p>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-specs">
+        <div class="specs-grid">
+          <div class="spec-row"><span>Brand</span><strong><%= car.brand %></strong></div>
+          <div class="spec-row"><span>Model</span><strong><%= car.model %></strong></div>
+          <% if (car.version) { %><div class="spec-row"><span>Version</span><strong><%= car.version %></strong></div><% } %>
+          <div class="spec-row"><span>Year</span><strong><%= car.year %></strong></div>
+          <div class="spec-row"><span>Kilometres</span><strong><%= car.kilometers ? car.kilometers.toLocaleString() : '0' %> km</strong></div>
+          <% if (car.engine) { %><div class="spec-row"><span>Engine</span><strong><%= car.engine %></strong></div><% } %>
+          <% if (car.horsepower) { %><div class="spec-row"><span>Horsepower</span><strong><%= car.horsepower %> bhp</strong></div><% } %>
+          <div class="spec-row"><span>Fuel Type</span><strong><%= car.fuel_type %></strong></div>
+          <div class="spec-row"><span>Transmission</span><strong><%= car.transmission %></strong></div>
+          <% if (car.color) { %><div class="spec-row"><span>Colour</span><strong><%= car.color %></strong></div><% } %>
+          <div class="spec-row"><span>Condition</span><strong><%= car.condition ? (car.condition.charAt(0).toUpperCase() + car.condition.slice(1)) : 'N/A' %></strong></div>
+          <% if (car.doors) { %><div class="spec-row"><span>Doors</span><strong><%= car.doors %></strong></div><% } %>
+          <% if (car.body_type) { %><div class="spec-row"><span>Body Type</span><strong><%= car.body_type %></strong></div><% } %>
+          <% if (car.interior) { %><div class="spec-row"><span>Interior</span><strong><%= car.interior %></strong></div><% } %>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-features">
+        <% if (car.features && car.features.length > 0) { %>
+        <div class="features-grid">
+          <% car.features.forEach(f => { %>
+          <div class="feature-item"><i class="fas fa-check-circle"></i> <%= f %></div>
+          <% }) %>
+        </div>
+        <% } else { %>
+        <p>No features listed for this vehicle.</p>
+        <% } %>
+      </div>
+
+      <div class="tab-content" id="tab-enquire">
+        <div class="enquire-form-wrap">
+          <h3>Enquire About This Vehicle</h3>
+          <p>Fill in your details and we'll get back to you as soon as possible.</p>
+          <% if (success && success.length > 0) { %>
+          <div class="alert alert-success"><i class="fas fa-check-circle"></i> <%= success[0] %></div>
+          <% } %>
+          <form action="/contact" method="POST" class="enquire-form">
+            <input type="hidden" name="car_id" value="<%= car.id %>">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Your Name *</label>
+                <input type="text" name="name" required placeholder="Full name">
+              </div>
+              <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" name="phone" required placeholder="+355 6X XXX XXXX">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" name="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea name="message" rows="4" placeholder="I'm interested in this <%= car.brand %> <%= car.model %>...">I am interested in the <%= car.brand %> <%= car.model %> (<%= car.year %>). Please contact me with more details.</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">
+              <i class="fas fa-paper-plane"></i> Send Enquiry
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Similar Cars -->
+    <% if (similar.length > 0) { %>
+    <div class="similar-section">
+      <h2 class="section-title">Similar <span>Vehicles</span></h2>
+      <div class="cars-grid cars-grid-3">
+        <% similar.forEach(s => { %>
+        <div class="car-card">
+          <div class="car-card-img">
+            <a href="/car/<%= s.id %>">
+              <img src="<%= s.main_image || '/images/car-placeholder.svg' %>" alt="<%= s.brand %> <%= s.model %>" loading="lazy">
+            </a>
+            <div class="car-badge status-<%= s.status %>"><%= s.status.charAt(0).toUpperCase() + s.status.slice(1) %></div>
+          </div>
+          <div class="car-card-body">
+            <div class="car-card-brand"><%= s.brand %></div>
+            <h3 class="car-card-title"><a href="/car/<%= s.id %>"><%= s.model %> <span><%= s.version || '' %></span></a></h3>
+            <div class="car-card-specs">
+              <span><i class="fas fa-calendar-alt"></i> <%= s.year %></span>
+              <span><i class="fas fa-tachometer-alt"></i> <%= s.kilometers ? s.kilometers.toLocaleString() : '0' %> km</span>
+            </div>
+            <div class="car-card-footer">
+              <div class="car-price">€<%= s.price ? s.price.toLocaleString() : '0' %></div>
+              <a href="/car/<%= s.id %>" class="btn btn-sm btn-primary">Details</a>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<script>
+// Gallery
+const thumbs = document.querySelectorAll('.gallery-thumb');
+const mainImg = document.getElementById('mainGalleryImg');
+const currentNum = document.getElementById('galleryCurrentNum');
+const totalNum = document.getElementById('galleryTotalNum');
+const images = Array.from(thumbs).map(t => t.dataset.img);
+let current = 0;
+
+totalNum.textContent = images.length;
+
+thumbs.forEach((thumb, i) => {
+  thumb.addEventListener('click', () => {
+    current = i;
+    updateGallery();
+  });
+});
+
+document.getElementById('galleryPrev').addEventListener('click', () => {
+  current = (current - 1 + images.length) % images.length;
+  updateGallery();
+});
+
+document.getElementById('galleryNext').addEventListener('click', () => {
+  current = (current + 1) % images.length;
+  updateGallery();
+});
+
+function updateGallery() {
+  mainImg.src = images[current];
+  currentNum.textContent = current + 1;
+  thumbs.forEach((t, i) => t.classList.toggle('active', i === current));
+}
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+</script>
+
+<%- include('partials/footer') %>

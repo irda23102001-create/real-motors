@@ -1,0 +1,70 @@
+<%- include('partials/header', { activePage: 'cars' }) %>
+
+<div class="admin-page-header">
+  <div>
+    <h1><i class="fas fa-car"></i> Car Inventory</h1>
+    <p>Manage all vehicles in your inventory</p>
+  </div>
+  <a href="/admin/cars/add" class="btn-admin-primary"><i class="fas fa-plus"></i> Add New Car</a>
+</div>
+
+<div class="admin-card">
+  <div class="admin-card-header">
+    <h3>All Vehicles (<%= cars.length %>)</h3>
+    <input type="text" id="carSearch" placeholder="Search cars..." class="admin-search">
+  </div>
+  <div class="admin-table-wrap">
+    <table class="admin-table" id="carsTable">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Vehicle</th>
+          <th>Year</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% cars.forEach(car => { %>
+        <tr>
+          <td>
+            <img src="<%= car.main_image || '/images/car-placeholder.jpg' %>" alt="<%= car.brand %> <%= car.model %>" class="admin-car-thumb">
+          </td>
+          <td>
+            <strong><%= car.brand %> <%= car.model %></strong><br>
+            <small><%= car.version || '' %></small><br>
+            <small class="text-muted"><i class="fas fa-tachometer-alt"></i> <%= car.kilometers ? car.kilometers.toLocaleString() : 0 %> km &bull; <%= car.fuel_type %> &bull; <%= car.transmission %></small>
+          </td>
+          <td><%= car.year %></td>
+          <td><strong>€<%= car.price ? car.price.toLocaleString() : '0' %></strong></td>
+          <td><span class="badge badge-<%= car.status %>"><%= car.status.charAt(0).toUpperCase() + car.status.slice(1) %></span></td>
+          <td>
+            <div class="action-btns">
+              <a href="/car/<%= car.id %>" target="_blank" class="action-btn view-btn" title="View on site"><i class="fas fa-eye"></i></a>
+              <a href="/admin/cars/edit/<%= car.id %>" class="action-btn edit-btn" title="Edit"><i class="fas fa-edit"></i></a>
+              <form action="/admin/cars/delete/<%= car.id %>" method="POST" class="inline-form" onsubmit="return confirm('Delete this car? This cannot be undone.')">
+                <button type="submit" class="action-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <% }) %>
+        <% if (cars.length === 0) { %>
+        <tr><td colspan="6" class="empty-row">No cars in inventory. <a href="/admin/cars/add">Add your first car</a>.</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+document.getElementById('carSearch').addEventListener('input', function() {
+  const val = this.value.toLowerCase();
+  document.querySelectorAll('#carsTable tbody tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none';
+  });
+});
+</script>
+
+<%- include('partials/footer') %>

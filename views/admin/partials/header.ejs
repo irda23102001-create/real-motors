@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="admin-body">
+
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-brand">
+      <img src="/images/logo.png" alt="Real Motors" class="sidebar-logo">
+      <span class="sidebar-label">Admin Panel</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/admin/dashboard" class="sidebar-link <%= typeof activePage !== 'undefined' && activePage === 'dashboard' ? 'active' : '' %>">
+        <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+      </a>
+      <a href="/admin/cars" class="sidebar-link <%= typeof activePage !== 'undefined' && activePage === 'cars' ? 'active' : '' %>">
+        <i class="fas fa-car"></i> <span>Cars</span>
+      </a>
+      <a href="/admin/cars/add" class="sidebar-link <%= typeof activePage !== 'undefined' && activePage === 'add-car' ? 'active' : '' %>">
+        <i class="fas fa-plus-circle"></i> <span>Add Car</span>
+      </a>
+      <a href="/admin/appointments" class="sidebar-link <%= typeof activePage !== 'undefined' && activePage === 'appointments' ? 'active' : '' %>">
+        <i class="fas fa-calendar-check"></i> <span>Appointments</span>
+      </a>
+      <a href="/admin/contacts" class="sidebar-link <%= typeof activePage !== 'undefined' && activePage === 'contacts' ? 'active' : '' %>">
+        <i class="fas fa-envelope"></i> <span>Messages</span>
+      </a>
+      <div class="sidebar-divider"></div>
+      <a href="/" target="_blank" class="sidebar-link">
+        <i class="fas fa-external-link-alt"></i> <span>View Website</span>
+      </a>
+      <a href="/admin/logout" class="sidebar-link sidebar-logout">
+        <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <div class="admin-main">
+    <header class="admin-header">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+      <div class="admin-header-right">
+        <span class="admin-user"><i class="fas fa-user-circle"></i> Admin</span>
+        <a href="/admin/logout" class="admin-logout-btn"><i class="fas fa-sign-out-alt"></i></a>
+      </div>
+    </header>
+
+    <div class="admin-content">
+      <% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+      <div class="admin-alert admin-alert-success"><i class="fas fa-check-circle"></i> <%= success[0] %></div>
+      <% } %>
+      <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+      <div class="admin-alert admin-alert-error"><i class="fas fa-exclamation-circle"></i> <%= error[0] %></div>
+      <% } %>

@@ -1,0 +1,151 @@
+<%- include('partials/header') %>
+
+<div class="page-hero">
+  <div class="page-hero-bg" style="background-image: url('/images/hero-inventory.jpg')"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <h1>Our <span>Inventory</span></h1>
+    <p>Browse our curated selection of premium vehicles</p>
+    <nav class="breadcrumb">
+      <a href="/">Home</a> <i class="fas fa-chevron-right"></i> <span>Inventory</span>
+    </nav>
+  </div>
+</div>
+
+<section class="inventory-section">
+  <div class="container">
+    <!-- Filters -->
+    <div class="filter-panel">
+      <div class="filter-header">
+        <h3><i class="fas fa-sliders-h"></i> Filter Vehicles</h3>
+        <button class="filter-toggle" id="filterToggle">
+          <i class="fas fa-filter"></i> <span>Filters</span>
+        </button>
+      </div>
+      <form action="/inventory" method="GET" class="filter-form" id="filterForm">
+        <div class="filter-grid">
+          <div class="filter-group">
+            <label>Search</label>
+            <div class="search-input-wrap">
+              <i class="fas fa-search"></i>
+              <input type="text" name="search" placeholder="Brand, model, version..." value="<%= filters.search || '' %>">
+            </div>
+          </div>
+          <div class="filter-group">
+            <label>Brand</label>
+            <select name="brand">
+              <option value="">All Brands</option>
+              <% brands.forEach(b => { %>
+              <option value="<%= b.brand %>" <%= filters.brand === b.brand ? 'selected' : '' %>><%= b.brand %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Fuel Type</label>
+            <select name="fuel_type">
+              <option value="">All Fuels</option>
+              <option value="Petrol" <%= filters.fuel_type === 'Petrol' ? 'selected' : '' %>>Petrol</option>
+              <option value="Diesel" <%= filters.fuel_type === 'Diesel' ? 'selected' : '' %>>Diesel</option>
+              <option value="Hybrid" <%= filters.fuel_type === 'Hybrid' ? 'selected' : '' %>>Hybrid</option>
+              <option value="Electric" <%= filters.fuel_type === 'Electric' ? 'selected' : '' %>>Electric</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Transmission</label>
+            <select name="transmission">
+              <option value="">All</option>
+              <option value="Automatic" <%= filters.transmission === 'Automatic' ? 'selected' : '' %>>Automatic</option>
+              <option value="Manual" <%= filters.transmission === 'Manual' ? 'selected' : '' %>>Manual</option>
+              <option value="DSG Automatic" <%= filters.transmission === 'DSG Automatic' ? 'selected' : '' %>>DSG</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Min Price (€)</label>
+            <input type="number" name="min_price" placeholder="Min price" value="<%= filters.min_price || '' %>">
+          </div>
+          <div class="filter-group">
+            <label>Max Price (€)</label>
+            <input type="number" name="max_price" placeholder="Max price" value="<%= filters.max_price || '' %>">
+          </div>
+          <div class="filter-group">
+            <label>Sort By</label>
+            <select name="sort">
+              <option value="newest" <%= filters.sort === 'newest' ? 'selected' : '' %>>Newest First</option>
+              <option value="price_asc" <%= filters.sort === 'price_asc' ? 'selected' : '' %>>Price: Low to High</option>
+              <option value="price_desc" <%= filters.sort === 'price_desc' ? 'selected' : '' %>>Price: High to Low</option>
+              <option value="year_desc" <%= filters.sort === 'year_desc' ? 'selected' : '' %>>Year: Newest</option>
+              <option value="km_asc" <%= filters.sort === 'km_asc' ? 'selected' : '' %>>Lowest Mileage</option>
+            </select>
+          </div>
+          <div class="filter-actions">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+            <a href="/inventory" class="btn btn-ghost"><i class="fas fa-times"></i> Clear</a>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Results header -->
+    <div class="results-header">
+      <p class="results-count"><strong><%= total %></strong> vehicle<%= total !== 1 ? 's' : '' %> found</p>
+    </div>
+
+    <!-- Cars grid -->
+    <% if (cars.length > 0) { %>
+    <div class="cars-grid">
+      <% cars.forEach(car => { %>
+      <div class="car-card">
+        <div class="car-card-img">
+          <a href="/car/<%= car.id %>">
+            <img src="<%= car.main_image || '/images/car-placeholder.svg' %>" alt="<%= car.brand %> <%= car.model %>" loading="lazy">
+          </a>
+          <div class="car-badge status-<%= car.status %>"><%= car.status.charAt(0).toUpperCase() + car.status.slice(1) %></div>
+          <div class="car-card-overlay">
+            <a href="/car/<%= car.id %>" class="btn-view">View Details <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="car-card-body">
+          <div class="car-card-brand"><%= car.brand %></div>
+          <h3 class="car-card-title"><a href="/car/<%= car.id %>"><%= car.model %> <span><%= car.version || '' %></span></a></h3>
+          <div class="car-card-specs">
+            <span><i class="fas fa-calendar-alt"></i> <%= car.year %></span>
+            <span><i class="fas fa-tachometer-alt"></i> <%= car.kilometers ? car.kilometers.toLocaleString() : '0' %> km</span>
+            <span><i class="fas fa-gas-pump"></i> <%= car.fuel_type %></span>
+            <span><i class="fas fa-cog"></i> <%= car.transmission %></span>
+          </div>
+          <div class="car-card-footer">
+            <div class="car-price">€<%= car.price ? car.price.toLocaleString() : '0' %></div>
+            <a href="/car/<%= car.id %>" class="btn btn-sm btn-primary">Details</a>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+
+    <!-- Pagination -->
+    <% if (totalPages > 1) { %>
+    <div class="pagination">
+      <% if (currentPage > 1) { %>
+      <a href="?page=<%= currentPage - 1 %>" class="page-btn"><i class="fas fa-chevron-left"></i></a>
+      <% } %>
+      <% for (let i = 1; i <= totalPages; i++) { %>
+      <a href="?page=<%= i %>" class="page-btn <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+      <% } %>
+      <% if (currentPage < totalPages) { %>
+      <a href="?page=<%= currentPage + 1 %>" class="page-btn"><i class="fas fa-chevron-right"></i></a>
+      <% } %>
+    </div>
+    <% } %>
+
+    <% } else { %>
+    <div class="no-results">
+      <i class="fas fa-car"></i>
+      <h3>No vehicles found</h3>
+      <p>Try adjusting your search filters.</p>
+      <a href="/inventory" class="btn btn-primary">View All</a>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

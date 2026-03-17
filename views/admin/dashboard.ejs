@@ -1,0 +1,159 @@
+<%- include('partials/header', { activePage: 'dashboard' }) %>
+
+<div class="admin-page-header">
+  <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+  <p>Welcome back! Here's what's happening at Real Motors.</p>
+</div>
+
+<!-- Stats -->
+<div class="admin-stats-grid">
+  <div class="admin-stat-card blue">
+    <div class="stat-icon"><i class="fas fa-car"></i></div>
+    <div class="stat-info">
+      <div class="stat-num"><%= stats.totalCars %></div>
+      <div class="stat-label">Total Vehicles</div>
+    </div>
+  </div>
+  <div class="admin-stat-card green">
+    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+    <div class="stat-info">
+      <div class="stat-num"><%= stats.availableCars %></div>
+      <div class="stat-label">Available</div>
+    </div>
+  </div>
+  <div class="admin-stat-card orange">
+    <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+    <div class="stat-info">
+      <div class="stat-num"><%= stats.pendingAppointments %></div>
+      <div class="stat-label">Pending Appointments</div>
+    </div>
+  </div>
+  <div class="admin-stat-card red">
+    <div class="stat-icon"><i class="fas fa-envelope"></i></div>
+    <div class="stat-info">
+      <div class="stat-num"><%= stats.newContacts %></div>
+      <div class="stat-label">New Messages</div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="admin-quick-actions">
+  <a href="/admin/cars/add" class="quick-action-btn">
+    <i class="fas fa-plus"></i> Add New Car
+  </a>
+  <a href="/admin/appointments" class="quick-action-btn">
+    <i class="fas fa-calendar-check"></i> View Appointments
+  </a>
+  <a href="/admin/contacts" class="quick-action-btn">
+    <i class="fas fa-envelope"></i> View Messages
+  </a>
+  <a href="/inventory" target="_blank" class="quick-action-btn">
+    <i class="fas fa-eye"></i> View Inventory
+  </a>
+</div>
+
+<div class="admin-two-col">
+  <!-- Recent Appointments -->
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <h3><i class="fas fa-calendar-check"></i> Recent Appointments</h3>
+      <a href="/admin/appointments" class="view-all">View All</a>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Car</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (recentAppointments.length > 0) { %>
+          <% recentAppointments.forEach(a => { %>
+          <tr>
+            <td><strong><%= a.name %></strong><br><small><%= a.phone %></small></td>
+            <td><%= a.car_name || 'General Visit' %></td>
+            <td><%= a.appointment_date || 'TBD' %></td>
+            <td><span class="badge badge-<%= a.status %>"><%= a.status %></span></td>
+          </tr>
+          <% }) %>
+          <% } else { %>
+          <tr><td colspan="4" class="empty-row">No appointments yet</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Messages -->
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <h3><i class="fas fa-envelope"></i> Recent Messages</h3>
+      <a href="/admin/contacts" class="view-all">View All</a>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (recentContacts.length > 0) { %>
+          <% recentContacts.forEach(c => { %>
+          <tr>
+            <td><strong><%= c.name %></strong></td>
+            <td><%= c.email %></td>
+            <td><%= new Date(c.created_at).toLocaleDateString() %></td>
+            <td><span class="badge badge-<%= c.status %>"><%= c.status %></span></td>
+          </tr>
+          <% }) %>
+          <% } else { %>
+          <tr><td colspan="4" class="empty-row">No messages yet</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Inventory Summary -->
+<div class="admin-card">
+  <div class="admin-card-header">
+    <h3><i class="fas fa-chart-pie"></i> Inventory Summary</h3>
+  </div>
+  <div class="inventory-summary">
+    <div class="summary-item">
+      <div class="summary-bar-label">
+        <span>Available</span><span><%= stats.availableCars %></span>
+      </div>
+      <div class="summary-bar">
+        <div class="summary-bar-fill green" style="width:<%= stats.totalCars > 0 ? (stats.availableCars/stats.totalCars*100) : 0 %>%"></div>
+      </div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-bar-label">
+        <span>Reserved</span><span><%= stats.reservedCars %></span>
+      </div>
+      <div class="summary-bar">
+        <div class="summary-bar-fill orange" style="width:<%= stats.totalCars > 0 ? (stats.reservedCars/stats.totalCars*100) : 0 %>%"></div>
+      </div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-bar-label">
+        <span>Sold</span><span><%= stats.soldCars %></span>
+      </div>
+      <div class="summary-bar">
+        <div class="summary-bar-fill blue" style="width:<%= stats.totalCars > 0 ? (stats.soldCars/stats.totalCars*100) : 0 %>%"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
