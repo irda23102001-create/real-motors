@@ -98,6 +98,9 @@ function initializeDatabase() {
   const carCount = db.prepare('SELECT COUNT(*) as count FROM cars').get();
   if (carCount.count === 0) {
     seedCars(db);
+  } else {
+    // Fix old .svg image paths to .jpg
+    db.prepare("UPDATE cars SET main_image = REPLACE(main_image, '.svg', '.jpg') WHERE main_image LIKE '%.svg'").run();
   }
 
   console.log('✅ Database initialized successfully');
