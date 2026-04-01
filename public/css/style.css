@@ -431,7 +431,7 @@ img { max-width: 100%; }
   position: relative; border-radius: var(--radius-lg); overflow: hidden;
   background: var(--bg-soft); aspect-ratio: 4/3;
 }
-.main-gallery img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
+.main-gallery img { width: 100%; height: 100%; object-fit: contain; background: #f0f3f8; transition: opacity 0.3s; }
 .gallery-btn {
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 44px; height: 44px; border-radius: 50%;
